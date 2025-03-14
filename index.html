@@ -88,6 +88,12 @@
             color: #ff3333;
         }
 
+        #timer {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 480px) {
             .container {
                 margin: 10px;
@@ -109,6 +115,7 @@
 </head>
 <body>
     <div class="container">
+        <div id="timer"></div>
         <h1>KL Calculator</h1>
         <div class="description">
             Maintain a minimum of 75% attendance to ensure eligibility for examinations and not to get detained.
@@ -131,86 +138,109 @@
 
     <script>
         const lectureInput = document.getElementById('lecture');
-        const tutorialInput = document.getElementById('tutorial');
-        const practicalInput = document.getElementById('practical');
-        const skillInput = document.getElementById('skill');
-        const calculateButton = document.getElementById('calculateButton');
-        const resultDiv = document.getElementById('result');
-        const totalPercentageDiv = document.getElementById('totalPercentage');
-        const errorMessageDiv = document.getElementById('errorMessage');
+const tutorialInput = document.getElementById('tutorial');
+const practicalInput = document.getElementById('practical');
+const skillInput = document.getElementById('skill');
+const calculateButton = document.getElementById('calculateButton');
+const resultDiv = document.getElementById('result');
+const totalPercentageDiv = document.getElementById('totalPercentage');
+const errorMessageDiv = document.getElementById('errorMessage');
+const timerDiv = document.getElementById('timer');
 
-        function checkInputs() {
-            let filledCount = 0;
-            if (lectureInput.value !== '') filledCount++;
-            if (tutorialInput.value !== '') filledCount++;
-            if (practicalInput.value !== '') filledCount++;
-            if (skillInput.value !== '') filledCount++;
-            calculateButton.disabled = filledCount < 2;
+function updateTimer() {
+    const duration = 17 * 60 * 60; // 17 hours in seconds
+    let remaining = duration;
+
+    const interval = setInterval(function() {
+        const hours = Math.floor(remaining / 3600);
+        const minutes = Math.floor((remaining % 3600) / 60);
+        const seconds = remaining % 60;
+
+        timerDiv.textContent = `Next update set at: ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+
+        if (remaining <= 0) {
+            clearInterval(interval);
+            timerDiv.textContent = "Updates are live!";
         }
 
-        lectureInput.addEventListener('input', checkInputs);
-        tutorialInput.addEventListener('input', checkInputs);
-        practicalInput.addEventListener('input', checkInputs);
-        skillInput.addEventListener('input', checkInputs);
+        remaining--;
+    }, 1000);
+}
 
-        calculateButton.addEventListener('click', function() {
-            let lecture = parseFloat(lectureInput.value) || 0;
-            let tutorial = parseFloat(tutorialInput.value) || 0;
-            let practical = parseFloat(practicalInput.value) || 0;
-            let skill = parseFloat(skillInput.value) || 0;
+updateTimer();
 
-            let count = 0;
-            let total = 0;
+function checkInputs() {
+    let filledCount = 0;
+    if (lectureInput.value !== '') filledCount++;
+    if (tutorialInput.value !== '') filledCount++;
+    if (practicalInput.value !== '') filledCount++;
+    if (skillInput.value !== '') filledCount++;
+    calculateButton.disabled = filledCount < 2;
+}
 
-            if (lectureInput.value !== '') { total += lecture; count++; }
-            if (tutorialInput.value !== '') { total += tutorial; count++; }
-            if (practicalInput.value !== '') { total += practical; count++; }
-            if (skillInput.value !== '') { total += skill; count++; }
+lectureInput.addEventListener('input', checkInputs);
+tutorialInput.addEventListener('input', checkInputs);
+practicalInput.addEventListener('input', checkInputs);
+skillInput.addEventListener('input', checkInputs);
 
-            if (count === 0) {
-                errorMessageDiv.textContent = "Please enter your attendance.";
-                resultDiv.textContent = "";
-                totalPercentageDiv.textContent = "";
-                return;
-            } else {
-                errorMessageDiv.textContent = "";
-            }
+calculateButton.addEventListener('click', function() {
+    let lecture = parseFloat(lectureInput.value) || 0;
+    let tutorial = parseFloat(tutorialInput.value) || 0;
+    let practical = parseFloat(practicalInput.value) || 0;
+    let skill = parseFloat(skillInput.value) || 0;
 
-            const average = count > 0 ? total / count : 0;
-            let percentageColor = "";
+    let count = 0;
+    let total = 0;
 
-            if (average < 75) {
-                percentageColor = "#ff3333";
-            } else if (average >= 75 && average <= 85) {
-                percentageColor = "#fff500";
-            } else {
-                percentageColor = "#50e3c2";
-            }
+    if (lectureInput.value !== '') { total += lecture; count++; }
+    if (tutorialInput.value !== '') { total += tutorial; count++; }
+    if (practicalInput.value !== '') { total += practical; count++; }
+    if (skillInput.value !== '') { total += skill; count++; }
 
-            totalPercentageDiv.innerHTML = `Total Percentage: <span style="color: ${percentageColor};">${average.toFixed(2)}%</span>`;
+    if (count === 0) {
+        errorMessageDiv.textContent = "Please enter your attendance.";
+        resultDiv.textContent = "";
+        totalPercentageDiv.textContent = "";
+        return;
+    } else {
+        errorMessageDiv.textContent = "";
+    }
 
-            if (average < 75) {
-                resultDiv.textContent = "Attend classes regularly or you will be detained for that subject and cannot write the exams.";
-            } else if (average >= 75 && average <= 85) {
-                resultDiv.textContent = "You need to pay the condonation fee and are eligible to write the exams.";
-            } else {
-                resultDiv.textContent = "You are in the safe zone and are eligible to write the exams.";
-            }
-            setTimeout(function() {
-                location.reload();
-            }, 10000);
+    const average = count > 0 ? total / count : 0;
+    let percentageColor = "";
 
-        });
+    if (average < 75) {
+        percentageColor = "#ff3333";
+    } else if (average >= 75 && average <= 85) {
+        percentageColor = "#fff500";
+    } else {
+        percentageColor = "#50e3c2";
+    }
 
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
+    totalPercentageDiv.innerHTML = `Total Percentage: <span style="color: ${percentageColor};">${average.toFixed(2)}%</span>`;
 
-        document.addEventListener('keydown', function(e) {
-            if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-        });
-    </script>
+    if (average < 75) {
+        resultDiv.textContent = "Attend classes regularly or you will be detained for that subject and cannot write the exams.";
+    } else if (average >= 75 && average <= 85) {
+        resultDiv.textContent = "You need to pay the condonation fee and are eligible to write the exams.";
+    } else {
+        resultDiv.textContent = "You are in the safe zone and are eligible to write the exams.";
+    }
+    setTimeout(function() {
+        location.reload();
+    }, 10000);
+
+});
+
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener('keydown', function(e) {
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        e.preventDefault();
+    }
+});
+</script>
 </body>
 </html>
