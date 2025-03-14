@@ -156,11 +156,11 @@ function updateTimer() {
         const minutes = Math.floor((remaining % 3600) / 60);
         const seconds = remaining % 60;
 
-        timerDiv.innerHTML = `<span style="color: #fff500;">Next update at:</span> <span style="text-decoration: underline;">${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s</span>`;
+        timerDiv.innerHTML = `<span style="color: #fff500;">Next update at:</span> <span style="color: #fff500; text-decoration: 1px white underline;">${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s</span>`;
 
         if (remaining <= 0) {
             clearInterval(interval);
-            timerDiv.innerHTML = `<span style="color: #fff500;">Updates are live!</span>`;
+            timerDiv.innerHTML = `<span style="color: #50e3c2;">Updates are live!</span>`;
         }
 
         remaining--;
