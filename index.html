@@ -156,11 +156,11 @@ function updateTimer() {
         const minutes = Math.floor((remaining % 3600) / 60);
         const seconds = remaining % 60;
 
-        timerDiv.textContent = `Next update set at: ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+        timerDiv.innerHTML = `<span style="color: #fff500;">Next update set at:</span> <span style="text-decoration: underline;">${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s</span>`;
 
         if (remaining <= 0) {
             clearInterval(interval);
-            timerDiv.textContent = "Updates are live!";
+            timerDiv.innerHTML = `<span style="color: #fff500;">Updates are live!</span>`;
         }
 
         remaining--;
@@ -228,7 +228,7 @@ calculateButton.addEventListener('click', function() {
     }
     setTimeout(function() {
         location.reload();
-    }, 10000);
+    }, 5000);
 
 });
 
@@ -241,6 +241,6 @@ document.addEventListener('keydown', function(e) {
         e.preventDefault();
     }
 });
-</script>
+    </script>
 </body>
 </html>
