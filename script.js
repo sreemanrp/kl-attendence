@@ -22,7 +22,7 @@ function updateTimer() {
         const minutes = Math.floor((remainingTime % 3600) / 60);
         const seconds = remainingTime % 60;
 
-        timerDiv.innerHTML = `<div style="text-align: left; border-radius: 50px;"><span style="color: #fff500; border-radius: 50px;">⦿ Next update at:</span> <span style="color: #fff500; border-radius: 50px; text-decoration: 1px white underline;">${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s</span></div>`;
+        timerDiv.innerHTML = `<div style="text-align: left;"><span style="color: #fff500;"> ⦿Next update at:</span> <span style="color: #fff500; text-decoration: 1px white underline;">${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s</span></div>`;
 
         if (remainingTime <= 0) {
             clearInterval(interval);
